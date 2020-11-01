@@ -4,9 +4,8 @@ SubShot is a python tool designed to enumerate subdomains of websites using OSIN
 
 The screenshot utility uses Selenium's Chrome Headless driver.
 
-Sublist3r enumerates subdomains using the following search engines: 
-> Google, Yahoo, Bing, Baidu and Ask. 
-> Netcraft, Virustotal, ThreatCrowd, DNSdumpster and ReverseDNS.
+Sublist3r enumerates subdomains using the following search engines and websites: 
+> Google, Yahoo, Bing, Baidu, Ask, Netcraft, Virustotal, ThreatCrowd, DNSdumpster and ReverseDNS.
 
 Libraries used: 
 > PyQt5, Selenium, argparse, dnspython, requests
