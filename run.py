@@ -3,12 +3,7 @@ from PyQt5.QtWidgets import *
 from PyQt5.Qt import *
 from subfinder import *
 #from prober import *
-#from shotter import *
-import os
-import webbrowser
-import time
-import subprocess
-#from shotter import *
+import os, webbrowser, time, subprocess
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 
@@ -148,7 +143,7 @@ class Ui_MainWindow(object):
 	    self.workingDir = customDir + "/"
 
     def openUrl(self):
-        url = QUrl('https://github.com')
+        url = QUrl('https://github.com/yatish609/SubShot')
         QDesktopServices.openUrl(url)
     
     def new_btn_clicked(self):
@@ -159,6 +154,7 @@ class Ui_MainWindow(object):
     def rawSubDomains(self):
         url = self.inputURL.text()
         filepath = self.workingDir + "Subdomains/subdomains.txt"
+        self.validatePath(filepath)
         os.system("python3 -u /home/yatish609/Documents/SubShot/subfinder.py -d " + url + " -o " + filepath + " >/dev/null 2>&1")
 
     def validatePath(self,path):
@@ -195,7 +191,6 @@ class Ui_MainWindow(object):
 
         inputPath = self.workingDir + "Subdomains/subdomains.txt"
         self.validatePath(inputPath)
-        print(inputPath)
         f = open(inputPath,"r")
         outputPath = self.workingDir + "Filtered_Subdomains/Filtered_subdomains.txt"
         self.validatePath(outputPath)
@@ -236,7 +231,6 @@ class Ui_MainWindow(object):
         with open(self.workingDir + "Filtered_Subdomains/Filtered_subdomains.txt","r") as f:
             content = f.readlines()
         content = [x.strip() for x in content]
-        print(content)
         count = 0
         screenshotDir = self.workingDir + "images/"
         self.validatePath(screenshotDir)
