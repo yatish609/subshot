@@ -17,8 +17,7 @@ Based on Python 3.8.3 and compiled using python's own virtualenv.
 To install dependencies:
 
 ~~~
-sudo pacman -Syu tcpdump
-sudo pip install PyQt5 scapy psutil
+pip install pyqt5 argparse requests dnspython
 ~~~
 
 To run SubShot:
