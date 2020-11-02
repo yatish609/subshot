@@ -10,7 +10,7 @@ class Ui_MainWindow(object):
         MainWindow.setObjectName("MainWindow")
         MainWindow.setFixedSize(790, 641)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap("/home/yatish609/Documents/SubShot/icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(self.rootDir + "icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         MainWindow.setWindowIcon(icon)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
@@ -165,6 +165,7 @@ class Ui_MainWindow(object):
 ####################################################################################################################################
 
     workingDir = os.path.dirname(os.path.realpath(__file__)) + "/"
+    rootDir = os.path.dirname(os.path.realpath(__file__)) + "/"
 
     def developer_btn_clicked(self):
         self.msg = QtWidgets.QMessageBox()
@@ -190,7 +191,7 @@ class Ui_MainWindow(object):
         url = self.inputURL.text()
         filepath = self.workingDir + "Subdomains/subdomains.txt"
         self.validatePath(filepath)
-        subprocess.run("python3 -u /home/yatish609/Documents/SubShot/subfinder.py -d " + url + " -o " + filepath + " >/dev/null 2>&1", shell=True)
+        subprocess.run("python3 -u " + self.workingDir + "subfinder.py -d " + url + " -o " + filepath + " >/dev/null 2>&1", shell=True)
 
     def validatePath(self,path):
         if not os.path.exists(os.path.dirname(path)):
@@ -230,7 +231,7 @@ class Ui_MainWindow(object):
         f = open(inputPath,"r")
         outputPath = self.workingDir + "Filtered_Subdomains/Filtered_subdomains.txt"
         self.validatePath(outputPath)
-        subprocess.run("python3 -u /home/yatish609/Documents/SubShot/prober.py -t 6 -f " + inputPath + " -s 200,301 -o " + outputPath + " >/dev/null 2>&1", shell=True)
+        subprocess.run("python3 -u " + self.workingDir + "prober.py -t 6 -f " + inputPath + " -s 200,301 -o " + outputPath + " >/dev/null 2>&1", shell=True)
         f.close()
 
         f1 = open(outputPath,"r")
@@ -254,7 +255,7 @@ class Ui_MainWindow(object):
         if self.customDirectoryCheckbox.isChecked():
             self.chooseDirectoryButton.setEnabled(True)
         else:
-            self.workingDir = os.path.dirname(os.path.realpath(__file__)) + "/"
+            self.workingDir = self.rootDir
             self.chooseDirectoryButton.setEnabled(False)
 
     def multithreadingCheckboxChanged(self):
