@@ -191,7 +191,7 @@ class Ui_MainWindow(object):
         url = self.inputURL.text()
         filepath = self.workingDir + "Subdomains/subdomains.txt"
         self.validatePath(filepath)
-        subprocess.run("python3 -u " + self.workingDir + "subfinder.py -d " + url + " -o " + filepath + " >/dev/null 2>&1", shell=True)
+        subprocess.run("python -u " + self.workingDir + "subfinder.py -d " + url + " -o " + filepath + " >/dev/null 2>&1", shell=True)
 
     def validatePath(self,path):
         if not os.path.exists(os.path.dirname(path)):
@@ -231,7 +231,7 @@ class Ui_MainWindow(object):
         f = open(inputPath,"r")
         outputPath = self.workingDir + "Filtered_Subdomains/Filtered_subdomains.txt"
         self.validatePath(outputPath)
-        subprocess.run("python3 -u " + self.workingDir + "prober.py -t 6 -f " + inputPath + " -s 200,301 -o " + outputPath + " >/dev/null 2>&1", shell=True)
+        subprocess.run("python -u " + self.workingDir + "prober.py -t 6 -f " + inputPath + " -s 200,301 -o " + outputPath + " >/dev/null 2>&1", shell=True)
         f.close()
 
         f1 = open(outputPath,"r")
