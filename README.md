@@ -17,7 +17,7 @@ Based on Python 3.8.3 and compiled using python's own virtualenv.
 To install dependencies:
 
 ~~~
-pip install pyqt5 argparse requests dnspython
+pip install pyqt5 argparse requests dnspython chromedriver
 ~~~
 
 To run SubShot:
