@@ -163,9 +163,9 @@ class Ui_MainWindow(object):
 ####################################################################################################################################
 ####################################################################################################################################
 ####################################################################################################################################
-    
-    workingDir = "/home/yatish609/Documents/SubShot/"
-    
+
+    workingDir = os.path.dirname(os.path.realpath(__file__)) + "/"
+
     def developer_btn_clicked(self):
         self.msg = QtWidgets.QMessageBox()
         self.msg.setIcon(QtWidgets.QMessageBox.Information)
@@ -182,7 +182,7 @@ class Ui_MainWindow(object):
         QDesktopServices.openUrl(url)
     
     def new_btn_clicked(self):
-        
+        print(self.workingDir)
         self.outputView.clear()
         self.inputURL.clear()
 
@@ -254,6 +254,7 @@ class Ui_MainWindow(object):
         if self.customDirectoryCheckbox.isChecked():
             self.chooseDirectoryButton.setEnabled(True)
         else:
+            self.workingDir = os.path.dirname(os.path.realpath(__file__)) + "/"
             self.chooseDirectoryButton.setEnabled(False)
 
     def multithreadingCheckboxChanged(self):
