@@ -148,6 +148,8 @@ class Ui_MainWindow(object):
         self.customthreadsCheckbox.setEnabled(False)
         self.screenshotCheckbox.setEnabled(False)
         self.inputCustomThreads.setEnabled(False)
+        self.customBruteFileButton.setEnabled(False)
+        self.customFileCheckbox.setEnabled(False)
 
         ### Connecting Buttons with respective functions
 
@@ -165,6 +167,8 @@ class Ui_MainWindow(object):
         self.multithreadingCheckbox.stateChanged.connect(self.multithreadingCheckboxChanged)
         self.probeCheckbox.stateChanged.connect(self.probeCheckboxChanged)
         self.customthreadsCheckbox.stateChanged.connect(self.customthreadsCheckboxChanged)
+        self.bruteForceCheckbox.stateChanged.connect(self.bruteForceCheckboxChanged)
+        self.customFileCheckbox.stateChanged.connect(self.customFileCheckboxChanged)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -206,6 +210,7 @@ class Ui_MainWindow(object):
     ############################ Global Variables ###########################
     workingDir = os.path.dirname(os.path.realpath(__file__)) + "/"
     rootDir = os.path.dirname(os.path.realpath(__file__)) + "/"
+    customBruteFileDir = ""
     
     ############################ Button Functions ###########################
 
@@ -219,7 +224,11 @@ class Ui_MainWindow(object):
     def dir(self):
 	    customDir = str(QFileDialog.getExistingDirectory())
 	    self.workingDir = customDir + "/"
-     
+    
+    def getcustomBruteFileDir(self):
+        customDir = str(QFileDialog.getExistingDirectory())
+        self.customBruteFileDir = customDir + "/"
+    
     def start_to_run(self):
         self.startButton.setStyleSheet("background-color: green")
         self.startButton.setText("Running")
@@ -230,6 +239,7 @@ class Ui_MainWindow(object):
         
     def startClicked(self):
         self.outputView.clear()
+        self.progressBar.setFormat('%p%')
         self.progressBar.setProperty("value",0)
         
         ## Validations
@@ -238,13 +248,18 @@ class Ui_MainWindow(object):
                 self.start_to_run()
                 
                 if self.probeCheckbox.isChecked():
+                    self.progressBar.setFormat('Probing - %p%')
                     self.probedOutput()
                     if self.screenshotCheckbox.isChecked():
+                        self.progressBar.setFormat('Screenshotting - %p%') 
                         self.runshot()
                     self.run_to_start()
+                    self.progressBar.setFormat('Done!')  
                 else:
+                    self.progressBar.setFormat('Scanning - %p%')
                     self.rawOutput()
                     self.run_to_start()
+                    self.progressBar.setFormat('Done!')
                     
     def openUrl(self):
         url = QUrl('https://github.com/yatish609/SubShot')
@@ -277,10 +292,23 @@ class Ui_MainWindow(object):
         else:
             self.inputCustomThreads.setEnabled(False)
             
+    def bruteForceCheckboxChanged(self):
+        if self.bruteForceCheckbox.isChecked():
+            self.customFileCheckbox.setEnabled(True)
+        else:
+            self.customFileCheckbox.setEnabled(False)
+            
+    def customFileCheckboxChanged(self):
+        if self.customFileCheckbox.isChecked():
+            self.customBruteFileButton.setEnabled(True)
+        else:
+            self.customBruteFileButton.setEnabled(False)
+            
     def newWorkspace(self):
         self.outputView.clear()
         self.inputURL.clear()
-        self.progressBar.setProperty("value",0)
+        self.progressBar.setProperty("value", 0)
+        self.progressBar.setFormat('%p%')
         
     def sleepTime(self, content):
         if len(content) > 10000:
@@ -348,7 +376,17 @@ class Ui_MainWindow(object):
         url = self.inputURL.text()
         filepath = self.workingDir + "Subdomains/subdomains.txt"
         self.validatePath(filepath)
-        subprocess.run("python -u " + self.rootDir + "subfinder.py -d " + url + " -o " + filepath, shell=True, stdout=subprocess.DEVNULL)
+        if self.bruteForceCheckbox.isChecked():
+            if self.customFileCheckbox.isChecked():
+                # Needs to be implemented
+                print("To be implemented")
+                #subprocess.run("python -u " + self.rootDir + "subfinder.py -d " + url + " -b " + self.customBruteFileDir + " -o " + filepath, shell=True, stdout=subprocess.DEVNULL)
+            subprocess.run("python -u " + self.rootDir + "subfinder.py -d " + url + " -b -t " + self.inputCustomThreads.text() + " -o " + filepath, shell=True, stdout=subprocess.DEVNULL)
+        else:
+            subprocess.run("python -u " + self.rootDir + "subfinder.py -d " + url + " -o " + filepath, shell=True, stdout=subprocess.DEVNULL)
+            #process = subprocess.Popen(["python -u " + self.rootDir + "subfinder.py -d " + url + " -v -n -o " + filepath], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+            #output, code = process.communicate()
+            #self.outputView.setText(str(output))
         
     def rawOutput(self):
         self.rawSubDomains()
