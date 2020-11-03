@@ -4,6 +4,7 @@ from PyQt5.Qt import *
 import os,webbrowser, time, subprocess
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
+import re
 
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
@@ -31,7 +32,7 @@ class Ui_MainWindow(object):
         self.progressBar.setProperty("value", 0)
         self.progressBar.setObjectName("progressBar")
         self.screenshotCheckbox = QtWidgets.QCheckBox(self.centralwidget)
-        self.screenshotCheckbox.setGeometry(QtCore.QRect(30, 300, 271, 31))
+        self.screenshotCheckbox.setGeometry(QtCore.QRect(50, 250, 271, 21))
         font = QtGui.QFont()
         font.setPointSize(12)
         self.screenshotCheckbox.setFont(font)
@@ -43,10 +44,13 @@ class Ui_MainWindow(object):
         self.startButton.setFont(font)
         self.startButton.setObjectName("startButton")
         self.chooseDirectoryButton = QtWidgets.QPushButton(self.centralwidget)
-        self.chooseDirectoryButton.setGeometry(QtCore.QRect(200, 220, 141, 31))
+        self.chooseDirectoryButton.setGeometry(QtCore.QRect(520, 210, 41, 31))
+        font = QtGui.QFont()
+        font.setPointSize(13)
+        self.chooseDirectoryButton.setFont(font)
         self.chooseDirectoryButton.setObjectName("chooseDirectoryButton")
         self.customDirectoryCheckbox = QtWidgets.QCheckBox(self.centralwidget)
-        self.customDirectoryCheckbox.setGeometry(QtCore.QRect(30, 220, 171, 31))
+        self.customDirectoryCheckbox.setGeometry(QtCore.QRect(340, 210, 171, 31))
         font = QtGui.QFont()
         font.setPointSize(12)
         self.customDirectoryCheckbox.setFont(font)
@@ -59,7 +63,7 @@ class Ui_MainWindow(object):
         self.mainLabel.setFont(font)
         self.mainLabel.setObjectName("mainLabel")
         self.probeCheckbox = QtWidgets.QCheckBox(self.centralwidget)
-        self.probeCheckbox.setGeometry(QtCore.QRect(30, 260, 231, 31))
+        self.probeCheckbox.setGeometry(QtCore.QRect(30, 210, 231, 31))
         font = QtGui.QFont()
         font.setPointSize(12)
         self.probeCheckbox.setFont(font)
@@ -71,19 +75,20 @@ class Ui_MainWindow(object):
         self.clearButton.setFont(font)
         self.clearButton.setObjectName("clearButton")
         self.multithreadingCheckbox = QtWidgets.QCheckBox(self.centralwidget)
-        self.multithreadingCheckbox.setGeometry(QtCore.QRect(380, 220, 231, 31))
+        self.multithreadingCheckbox.setGeometry(QtCore.QRect(30, 280, 201, 31))
         font = QtGui.QFont()
         font.setPointSize(12)
         self.multithreadingCheckbox.setFont(font)
         self.multithreadingCheckbox.setObjectName("multithreadingCheckbox")
         self.customthreadsCheckbox = QtWidgets.QCheckBox(self.centralwidget)
-        self.customthreadsCheckbox.setGeometry(QtCore.QRect(380, 260, 161, 31))
+        self.customthreadsCheckbox.setGeometry(QtCore.QRect(50, 310, 161, 31))
         font = QtGui.QFont()
         font.setPointSize(12)
         self.customthreadsCheckbox.setFont(font)
         self.customthreadsCheckbox.setObjectName("customthreadsCheckbox")
         self.inputCustomThreads = QtWidgets.QLineEdit(self.centralwidget)
-        self.inputCustomThreads.setGeometry(QtCore.QRect(540, 260, 41, 31))
+        self.inputCustomThreads.setGeometry(QtCore.QRect(210, 310, 41, 31))
+        self.inputCustomThreads.setAlignment(QtCore.Qt.AlignCenter)
         self.inputCustomThreads.setObjectName("inputCustomThreads")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
@@ -114,7 +119,7 @@ class Ui_MainWindow(object):
 
         self.retranslateUi(MainWindow)
         QtCore.QMetaObject.connectSlotsByName(MainWindow)
-
+        
         ### Custom Modifications
 
         self.chooseDirectoryButton.setEnabled(False)
@@ -125,12 +130,12 @@ class Ui_MainWindow(object):
         ### Connecting Buttons with respective functions
 
         self.startButton.clicked.connect(self.startClicked)
-        self.actionNew.triggered.connect(self.new_btn_clicked)
+        self.actionNew.triggered.connect(self.newWorkspace)
         self.actionExit.triggered.connect(sys.exit)
         self.actionDeveloper.triggered.connect(self.developer_btn_clicked)
         self.actionGitHub.triggered.connect(self.openUrl)
         self.chooseDirectoryButton.clicked.connect(self.dir)
-        self.clearButton.clicked.connect(self.new_btn_clicked)
+        self.clearButton.clicked.connect(self.newWorkspace)
 
 
         ### State Changed Actions
@@ -145,20 +150,21 @@ class Ui_MainWindow(object):
         self.urlLabel.setText(_translate("MainWindow", "Website URL:"))
         self.screenshotCheckbox.setText(_translate("MainWindow", "Save Subdomains Screenshot"))
         self.startButton.setText(_translate("MainWindow", "Start"))
-        self.chooseDirectoryButton.setText(_translate("MainWindow", "Choose Directory"))
-        self.customDirectoryCheckbox.setText(_translate("MainWindow", "Custom Directory: "))
+        self.chooseDirectoryButton.setText(_translate("MainWindow", "..."))
+        self.customDirectoryCheckbox.setText(_translate("MainWindow", "Custom Directory :"))
         self.mainLabel.setText(_translate("MainWindow", "SubShot"))
         self.probeCheckbox.setText(_translate("MainWindow", "Probe Working Domains"))
         self.clearButton.setText(_translate("MainWindow", "Clear"))
         self.multithreadingCheckbox.setText(_translate("MainWindow", "Enable Multithreading"))
         self.customthreadsCheckbox.setText(_translate("MainWindow", "Custom Threads:"))
+        self.inputCustomThreads.setText(_translate("MainWindow", "6"))
         self.menuFile.setTitle(_translate("MainWindow", "File"))
         self.menuAbout.setTitle(_translate("MainWindow", "About"))
         self.actionNew.setText(_translate("MainWindow", "New"))
         self.actionExit.setText(_translate("MainWindow", "Exit"))
         self.actionDeveloper.setText(_translate("MainWindow", "Developer"))
         self.actionGitHub.setText(_translate("MainWindow", "GitHub"))
-
+        
 ####################################################################################################################################
 ####################################################################################################################################
 ####################################################################################################################################
@@ -182,16 +188,16 @@ class Ui_MainWindow(object):
         url = QUrl('https://github.com/yatish609/SubShot')
         QDesktopServices.openUrl(url)
     
-    def new_btn_clicked(self):
-        print(self.workingDir)
+    def newWorkspace(self):
         self.outputView.clear()
         self.inputURL.clear()
+        self.progressBar.setProperty("value",0)
 
     def rawSubDomains(self):
         url = self.inputURL.text()
         filepath = self.workingDir + "Subdomains/subdomains.txt"
         self.validatePath(filepath)
-        subprocess.run("python -u " + self.workingDir + "subfinder.py -d " + url + " -o " + filepath + " >/dev/null 2>&1", shell=True)
+        subprocess.run("python -u " + self.rootDir + "subfinder.py -d " + url + " -o " + filepath, shell=True, stdout=subprocess.DEVNULL)
 
     def validatePath(self,path):
         if not os.path.exists(os.path.dirname(path)):
@@ -200,6 +206,46 @@ class Ui_MainWindow(object):
             except OSError as exc: # Guard against race condition
                 if exc.errno != errno.EEXIST:
                     raise
+                
+    def errorMessage(self, message):
+        msg = QMessageBox()
+        msg.setIcon(QMessageBox.Critical)
+        msg.setText("Error")
+        msg.setInformativeText(message)
+        msg.setWindowTitle("Error")
+        msg.exec_()
+                
+    def validateURL(self):
+        if self.inputURL.text()== "":
+            self.errorMessage('URL can not be blank')
+            return False
+        
+        if "." not in self.inputURL.text():
+            self.errorMessage('Enter a valid URL!')
+            return False
+        
+        regex = re.compile('[@_!#$^*()<>|}{~]')
+        
+        if(regex.search(self.inputURL.text()) == None):
+            return True
+        else:
+            self.errorMessage('URL should not contain special characters!')
+            return False
+                    
+    def validateThreadCount(self):
+        if self.customthreadsCheckbox.isChecked():
+            try: 
+                threadcount = self.inputCustomThreads.text()
+                a = int(threadcount)
+                if len(threadcount) < 3:
+                    return True
+                else:
+                    self.errorMessage('Thread count should be less than 100!')
+                    return False
+            except ValueError:
+                self.errorMessage('Thread count should be an integer!')
+                return False
+        return True
     
     def rawOutput(self):
         self.rawSubDomains()
@@ -211,12 +257,21 @@ class Ui_MainWindow(object):
         content = [x.strip() for x in content]
 
         count = 0
+        x = 100/len(content)
+        
         for i in content:
             self.outputView.append(i)
-            count = count + 1
+            count = count + x
             if count <= 99:
                 self.progressBar.setProperty("value",count)
-                time.sleep(0.3)
+                if len(content) > 10000:
+                    time.sleep(0.00001)
+                elif len(content) > 1000:
+                    time.sleep(0.001)
+                elif len(content) > 100:
+                    time.sleep(0.01)
+                else:
+                    time.sleep(0.1)
         
         count = 100
         self.progressBar.setProperty("value",count)
@@ -231,7 +286,15 @@ class Ui_MainWindow(object):
         f = open(inputPath,"r")
         outputPath = self.workingDir + "Filtered_Subdomains/Filtered_subdomains.txt"
         self.validatePath(outputPath)
-        subprocess.run("python -u " + self.workingDir + "prober.py -t 6 -f " + inputPath + " -s 200,301 -o " + outputPath + " >/dev/null 2>&1", shell=True)
+        if self.multithreadingCheckbox.isChecked():
+            if self.customthreadsCheckbox.isChecked():
+                threadcount = self.inputCustomThreads.text()
+                subprocess.run("python -u " + self.workingDir + "prober.py -t " + threadcount + " -f " + inputPath + " -s 200,301 -o " + outputPath, shell=True, stdout=subprocess.DEVNULL)
+            else:
+                subprocess.run("python -u " + self.workingDir + "prober.py -t 6 -f " + inputPath + " -s 200,301 -o " + outputPath, shell=True, stdout=subprocess.DEVNULL)
+        else:
+            subprocess.run("python -u " + self.workingDir + "prober.py -f " + inputPath + " -s 200,301 -o " + outputPath, shell=True, stdout=subprocess.DEVNULL)
+        
         f.close()
 
         f1 = open(outputPath,"r")
@@ -239,12 +302,21 @@ class Ui_MainWindow(object):
         content = [x.strip() for x in content]
 
         count = 0
+        x = 100/len(content)
+        
         for i in content:
             self.outputView.append(i)
-            count = count + 1
+            count = count + x
             if count <= 99:
                 self.progressBar.setProperty("value",count)
-                time.sleep(0.3)
+                if len(content) > 10000:
+                    time.sleep(0.00001)
+                elif len(content) > 1000:
+                    time.sleep(0.001)
+                elif len(content) > 100:
+                    time.sleep(0.01)
+                else:
+                    time.sleep(0.1)
         
         count = 100
         self.progressBar.setProperty("value",count)
@@ -277,12 +349,14 @@ class Ui_MainWindow(object):
             self.inputCustomThreads.setEnabled(False)
 
     def runshot(self):
-        options = webdriver.ChromeOptions()
-        options.add_argument('headless')
-        options.add_argument('window-size=1920x1080')
-        options.add_argument("disable-gpu")
+        chrome_options = webdriver.ChromeOptions()
+        chrome_options.add_argument('headless')
+        chrome_options.add_argument('window-size=1920x1080')
+        chrome_options.add_argument('--no-sandbox')
+        chrome_options.add_argument('disable-infobars')
+        chrome_options.add_argument("--disable-extensions")
 
-        driver = webdriver.Chrome(ChromeDriverManager().install(),chrome_options=options)
+        driver = webdriver.Chrome(ChromeDriverManager().install(),options=chrome_options)
 
         with open(self.workingDir + "Filtered_Subdomains/Filtered_subdomains.txt","r") as f:
             content = f.readlines()
@@ -306,17 +380,21 @@ class Ui_MainWindow(object):
 
     def startClicked(self):
         self.outputView.clear()
+        self.progressBar.setProperty("value",0)
         
-        self.start_to_run()
-        
-        if self.probeCheckbox.isChecked():
-            self.probedOutput()
-            if self.screenshotCheckbox.isChecked():
-                self.runshot()
-            self.run_to_start()
-        else:
-            self.rawOutput()
-            self.run_to_start()
+        ## Validations
+        if self.validateURL():
+            if self.validateThreadCount():
+                self.start_to_run()
+                
+                if self.probeCheckbox.isChecked():
+                    self.probedOutput()
+                    if self.screenshotCheckbox.isChecked():
+                        self.runshot()
+                    self.run_to_start()
+                else:
+                    self.rawOutput()
+                    self.run_to_start()
 
 
 if __name__ == "__main__":
