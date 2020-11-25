@@ -11,7 +11,6 @@ import socket
 import json
 from collections import Counter
 
-from subbrute import subbrute
 import dns.resolver
 import requests
 

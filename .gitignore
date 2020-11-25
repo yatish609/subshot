@@ -5,3 +5,6 @@ __pycache__
 images
 Subdomains
 Filtered_Subdomains
+build
+dist
+run.spec

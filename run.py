@@ -6,17 +6,18 @@ from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 import re
 
+
 class Ui_MainWindow(object):
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
-        MainWindow.setFixedSize(898, 601)
+        MainWindow.resize(911, 547)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(self.rootDir + "icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap("../.designer/backup/icon.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         MainWindow.setWindowIcon(icon)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.inputURL = QtWidgets.QLineEdit(self.centralwidget)
-        self.inputURL.setGeometry(QtCore.QRect(190, 160, 681, 31))
+        self.inputURL.setGeometry(QtCore.QRect(200, 160, 691, 31))
         self.inputURL.setObjectName("inputURL")
         self.urlLabel = QtWidgets.QLabel(self.centralwidget)
         self.urlLabel.setGeometry(QtCore.QRect(30, 150, 161, 51))
@@ -25,96 +26,81 @@ class Ui_MainWindow(object):
         self.urlLabel.setFont(font)
         self.urlLabel.setObjectName("urlLabel")
         self.outputView = QtWidgets.QTextBrowser(self.centralwidget)
-        self.outputView.setGeometry(QtCore.QRect(380, 210, 491, 271))
-        self.outputView.setAutoFillBackground(False)
-        self.outputView.setDocumentTitle("")
-        self.outputView.setOpenExternalLinks(True)
+        self.outputView.setGeometry(QtCore.QRect(400, 210, 491, 211))
         self.outputView.setObjectName("outputView")
         self.progressBar = QtWidgets.QProgressBar(self.centralwidget)
-        self.progressBar.setGeometry(QtCore.QRect(380, 510, 491, 31))
+        self.progressBar.setGeometry(QtCore.QRect(400, 450, 501, 31))
         self.progressBar.setProperty("value", 0)
         self.progressBar.setObjectName("progressBar")
         self.screenshotCheckbox = QtWidgets.QCheckBox(self.centralwidget)
-        self.screenshotCheckbox.setGeometry(QtCore.QRect(60, 250, 291, 31))
+        self.screenshotCheckbox.setGeometry(QtCore.QRect(60, 250, 291, 21))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.screenshotCheckbox.setFont(font)
         self.screenshotCheckbox.setObjectName("screenshotCheckbox")
         self.startButton = QtWidgets.QPushButton(self.centralwidget)
-        self.startButton.setGeometry(QtCore.QRect(30, 500, 131, 51))
+        self.startButton.setGeometry(QtCore.QRect(20, 440, 131, 51))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.startButton.setFont(font)
         self.startButton.setObjectName("startButton")
-        self.customBruteFileButton = QtWidgets.QPushButton(self.centralwidget)
-        self.customBruteFileButton.setGeometry(QtCore.QRect(220, 330, 41, 31))
-        font = QtGui.QFont()
-        font.setPointSize(13)
-        self.customBruteFileButton.setFont(font)
-        self.customBruteFileButton.setObjectName("customBruteFileButton")
         self.mainLabel = QtWidgets.QLabel(self.centralwidget)
-        self.mainLabel.setGeometry(QtCore.QRect(290, 0, 371, 161))
+        self.mainLabel.setGeometry(QtCore.QRect(330, 0, 371, 161))
         font = QtGui.QFont()
         font.setFamily("Parchment")
-        font.setPointSize(108)
+        font.setPointSize(80)
         self.mainLabel.setFont(font)
         self.mainLabel.setObjectName("mainLabel")
         self.probeCheckbox = QtWidgets.QCheckBox(self.centralwidget)
-        self.probeCheckbox.setGeometry(QtCore.QRect(30, 210, 211, 31))
+        self.probeCheckbox.setGeometry(QtCore.QRect(30, 210, 251, 31))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.probeCheckbox.setFont(font)
         self.probeCheckbox.setObjectName("probeCheckbox")
         self.clearButton = QtWidgets.QPushButton(self.centralwidget)
-        self.clearButton.setGeometry(QtCore.QRect(180, 500, 141, 51))
+        self.clearButton.setGeometry(QtCore.QRect(190, 440, 131, 51))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.clearButton.setFont(font)
         self.clearButton.setObjectName("clearButton")
         self.multithreadingCheckbox = QtWidgets.QCheckBox(self.centralwidget)
-        self.multithreadingCheckbox.setGeometry(QtCore.QRect(30, 370, 201, 31))
+        self.multithreadingCheckbox.setGeometry(QtCore.QRect(30, 280, 201, 31))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.multithreadingCheckbox.setFont(font)
         self.multithreadingCheckbox.setObjectName("multithreadingCheckbox")
         self.customthreadsCheckbox = QtWidgets.QCheckBox(self.centralwidget)
-        self.customthreadsCheckbox.setGeometry(QtCore.QRect(60, 400, 151, 41))
+        self.customthreadsCheckbox.setGeometry(QtCore.QRect(60, 310, 201, 41))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.customthreadsCheckbox.setFont(font)
         self.customthreadsCheckbox.setObjectName("customthreadsCheckbox")
         self.inputCustomThreads = QtWidgets.QLineEdit(self.centralwidget)
-        self.inputCustomThreads.setGeometry(QtCore.QRect(220, 400, 41, 31))
+        self.inputCustomThreads.setGeometry(QtCore.QRect(240, 320, 41, 31))
         self.inputCustomThreads.setText("")
         self.inputCustomThreads.setAlignment(QtCore.Qt.AlignCenter)
         self.inputCustomThreads.setObjectName("inputCustomThreads")
-        self.bruteForceCheckbox = QtWidgets.QCheckBox(self.centralwidget)
-        self.bruteForceCheckbox.setGeometry(QtCore.QRect(30, 290, 211, 31))
+        self.chooseDirectoryCheckbox = QtWidgets.QCheckBox(self.centralwidget)
+        self.chooseDirectoryCheckbox.setGeometry(QtCore.QRect(60, 380, 191, 31))
         font = QtGui.QFont()
         font.setPointSize(11)
-        self.bruteForceCheckbox.setFont(font)
-        self.bruteForceCheckbox.setObjectName("bruteForceCheckbox")
-        self.customFileCheckbox = QtWidgets.QCheckBox(self.centralwidget)
-        self.customFileCheckbox.setGeometry(QtCore.QRect(60, 330, 161, 31))
-        font = QtGui.QFont()
-        font.setPointSize(11)
-        self.customFileCheckbox.setFont(font)
-        self.customFileCheckbox.setObjectName("customFileCheckbox")
+        self.chooseDirectoryCheckbox.setFont(font)
+        self.chooseDirectoryCheckbox.setObjectName("chooseDirectoryCheckbox")
         self.chooseDirectoryButton = QtWidgets.QPushButton(self.centralwidget)
-        self.chooseDirectoryButton.setGeometry(QtCore.QRect(190, 450, 131, 31))
+        self.chooseDirectoryButton.setGeometry(QtCore.QRect(240, 380, 41, 31))
         font = QtGui.QFont()
-        font.setPointSize(10)
+        font.setPointSize(13)
         self.chooseDirectoryButton.setFont(font)
         self.chooseDirectoryButton.setObjectName("chooseDirectoryButton")
         self.customDirectoryCheckbox = QtWidgets.QCheckBox(self.centralwidget)
-        self.customDirectoryCheckbox.setGeometry(QtCore.QRect(30, 450, 161, 31))
+        self.customDirectoryCheckbox.setGeometry(QtCore.QRect(30, 350, 191, 31))
         font = QtGui.QFont()
         font.setPointSize(11)
         self.customDirectoryCheckbox.setFont(font)
         self.customDirectoryCheckbox.setObjectName("customDirectoryCheckbox")
         MainWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(MainWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 898, 20))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 911, 26))
         self.menubar.setObjectName("menubar")
         self.menuFile = QtWidgets.QMenu(self.menubar)
         self.menuFile.setObjectName("menuFile")
@@ -148,8 +134,6 @@ class Ui_MainWindow(object):
         self.customthreadsCheckbox.setEnabled(False)
         self.screenshotCheckbox.setEnabled(False)
         self.inputCustomThreads.setEnabled(False)
-        self.customBruteFileButton.setEnabled(False)
-        self.customFileCheckbox.setEnabled(False)
 
         ### Connecting Buttons with respective functions
 
@@ -167,41 +151,28 @@ class Ui_MainWindow(object):
         self.multithreadingCheckbox.stateChanged.connect(self.multithreadingCheckboxChanged)
         self.probeCheckbox.stateChanged.connect(self.probeCheckboxChanged)
         self.customthreadsCheckbox.stateChanged.connect(self.customthreadsCheckboxChanged)
-        self.bruteForceCheckbox.stateChanged.connect(self.bruteForceCheckboxChanged)
-        self.customFileCheckbox.stateChanged.connect(self.customFileCheckboxChanged)
 
     def retranslateUi(self, MainWindow):
         _translate = QtCore.QCoreApplication.translate
         MainWindow.setWindowTitle(_translate("MainWindow", "SubShot"))
-        self.inputURL.setPlaceholderText(_translate("MainWindow", "Enter URL"))
-        self.urlLabel.setText(_translate("MainWindow", "Website URL :"))
-        self.outputView.setHtml(_translate("MainWindow", "<!DOCTYPE HTML PUBLIC \"-//W3C//DTD HTML 4.0//EN\" \"http://www.w3.org/TR/REC-html40/strict.dtd\">\n"
-"<html><head><meta name=\"qrichtext\" content=\"1\" /><style type=\"text/css\">\n"
-"p, li { white-space: pre-wrap; }\n"
-"</style></head><body style=\" font-family:\'Sans Serif\'; font-size:9pt; font-weight:400; font-style:normal;\">\n"
-"<p style=\"-qt-paragraph-type:empty; margin-top:0px; margin-bottom:0px; margin-left:0px; margin-right:0px; -qt-block-indent:0; text-indent:0px; font-size:11pt;\"><br /></p></body></html>"))
+        self.urlLabel.setText(_translate("MainWindow", "Website URL:"))
         self.screenshotCheckbox.setText(_translate("MainWindow", "Save Subdomains Screenshot"))
         self.startButton.setText(_translate("MainWindow", "Start"))
-        self.customBruteFileButton.setText(_translate("MainWindow", "..."))
         self.mainLabel.setText(_translate("MainWindow", "SubShot"))
         self.probeCheckbox.setText(_translate("MainWindow", "Probe Working Domains"))
         self.clearButton.setText(_translate("MainWindow", "Clear"))
         self.multithreadingCheckbox.setText(_translate("MainWindow", "Enable Multithreading"))
         self.customthreadsCheckbox.setText(_translate("MainWindow", "Custom Threads:"))
-        self.inputCustomThreads.setText(_translate("MainWindow", "6"))
-        self.bruteForceCheckbox.setText(_translate("MainWindow", "Bruteforce Subdomains"))
-        self.customFileCheckbox.setText(_translate("MainWindow", "Custom input file:"))
-        self.chooseDirectoryButton.setText(_translate("MainWindow", "Choose Directory"))
-        self.customDirectoryCheckbox.setText(_translate("MainWindow", "Output Directory :"))
+        self.chooseDirectoryCheckbox.setText(_translate("MainWindow", "Choose Directory"))
+        self.chooseDirectoryButton.setText(_translate("MainWindow", "..."))
+        self.customDirectoryCheckbox.setText(_translate("MainWindow", "Custom Directory"))
         self.menuFile.setTitle(_translate("MainWindow", "File"))
         self.menuAbout.setTitle(_translate("MainWindow", "About"))
         self.actionNew.setText(_translate("MainWindow", "New"))
         self.actionExit.setText(_translate("MainWindow", "Exit"))
         self.actionDeveloper.setText(_translate("MainWindow", "Developer"))
         self.actionGitHub.setText(_translate("MainWindow", "GitHub"))
-        self.outputView.setStyleSheet("border: 1px solid black;")
         
-    
 ####################################################################################################################################
 ####################################################################################################################################
 ####################################################################################################################################
@@ -292,18 +263,6 @@ class Ui_MainWindow(object):
         else:
             self.inputCustomThreads.setEnabled(False)
             
-    def bruteForceCheckboxChanged(self):
-        if self.bruteForceCheckbox.isChecked():
-            self.customFileCheckbox.setEnabled(True)
-        else:
-            self.customFileCheckbox.setEnabled(False)
-            
-    def customFileCheckboxChanged(self):
-        if self.customFileCheckbox.isChecked():
-            self.customBruteFileButton.setEnabled(True)
-        else:
-            self.customBruteFileButton.setEnabled(False)
-            
     def newWorkspace(self):
         self.outputView.clear()
         self.inputURL.clear()
@@ -376,17 +335,10 @@ class Ui_MainWindow(object):
         url = self.inputURL.text()
         filepath = self.workingDir + "Subdomains/subdomains.txt"
         self.validatePath(filepath)
-        if self.bruteForceCheckbox.isChecked():
-            if self.customFileCheckbox.isChecked():
-                # Needs to be implemented
-                print("To be implemented")
-                #subprocess.run("python -u " + self.rootDir + "subfinder.py -d " + url + " -b " + self.customBruteFileDir + " -o " + filepath, shell=True, stdout=subprocess.DEVNULL)
-            subprocess.run("python -u " + self.rootDir + "subfinder.py -d " + url + " -b -t " + self.inputCustomThreads.text() + " -o " + filepath, shell=True, stdout=subprocess.DEVNULL)
-        else:
-            subprocess.run("python -u " + self.rootDir + "subfinder.py -d " + url + " -o " + filepath, shell=True, stdout=subprocess.DEVNULL)
-            #process = subprocess.Popen(["python -u " + self.rootDir + "subfinder.py -d " + url + " -v -n -o " + filepath], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-            #output, code = process.communicate()
-            #self.outputView.setText(str(output))
+        subprocess.run("python3 -u " + self.rootDir + "subfinder.py -d " + url + " -o " + filepath, shell=True, stdout=subprocess.DEVNULL)
+        #process = subprocess.Popen(["python3 -u " + self.rootDir + "subfinder.py -d " + url + " -v -n -o " + filepath], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
+        #output, code = process.communicate()
+        #self.outputView.setText(str(output))
         
     def rawOutput(self):
         self.rawSubDomains()
@@ -421,11 +373,11 @@ class Ui_MainWindow(object):
         if self.multithreadingCheckbox.isChecked():
             if self.customthreadsCheckbox.isChecked():
                 threadcount = self.inputCustomThreads.text()
-                subprocess.run("python -u " + self.rootDir + "prober.py -t " + threadcount + " -f " + inputPath + " -s 200,301 -o " + outputPath, shell=True, stdout=subprocess.DEVNULL)
+                subprocess.run("python3 -u " + self.rootDir + "prober.py -t " + threadcount + " -f " + inputPath + " -s 200,301 -o " + outputPath, shell=True, stdout=subprocess.DEVNULL)
             else:
-                subprocess.run("python -u " + self.rootDir + "prober.py -t 6 -f " + inputPath + " -s 200,301 -o " + outputPath, shell=True, stdout=subprocess.DEVNULL)
+                subprocess.run("python3 -u " + self.rootDir + "prober.py -t 6 -f " + inputPath + " -s 200,301 -o " + outputPath, shell=True, stdout=subprocess.DEVNULL)
         else:
-            subprocess.run("python -u " + self.rootDir + "prober.py -f " + inputPath + " -s 200,301 -o " + outputPath, shell=True, stdout=subprocess.DEVNULL)
+            subprocess.run("python3 -u " + self.rootDir + "prober.py -f " + inputPath + " -s 200,301 -o " + outputPath, shell=True, stdout=subprocess.DEVNULL)
         
         f.close()
 
@@ -477,7 +429,6 @@ class Ui_MainWindow(object):
             progressBarValue = progressBarValue + progressBarIncrementCount
             self.progressBar.setProperty("value",progressBarValue)
             time.sleep(delay)
-        
 
 
 if __name__ == "__main__":
