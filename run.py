@@ -336,9 +336,6 @@ class Ui_MainWindow(object):
         filepath = self.workingDir + "Subdomains/subdomains.txt"
         self.validatePath(filepath)
         subprocess.run("python3 -u " + self.rootDir + "subfinder.py -d " + url + " -o " + filepath, shell=True, stdout=subprocess.DEVNULL)
-        #process = subprocess.Popen(["python3 -u " + self.rootDir + "subfinder.py -d " + url + " -v -n -o " + filepath], stdout=subprocess.PIPE, stderr=subprocess.PIPE, shell=True)
-        #output, code = process.communicate()
-        #self.outputView.setText(str(output))
         
     def rawOutput(self):
         self.rawSubDomains()
