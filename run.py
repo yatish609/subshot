@@ -114,14 +114,14 @@ class Ui_MainWindow(object):
         self.actionNew.setObjectName("actionNew")
         self.actionExit = QtWidgets.QAction(MainWindow)
         self.actionExit.setObjectName("actionExit")
-        self.actionDeveloper = QtWidgets.QAction(MainWindow)
-        self.actionDeveloper.setObjectName("actionDeveloper")
+        self.actionAbout = QtWidgets.QAction(MainWindow)
+        self.actionAbout.setObjectName("actionAbout")
         self.actionGitHub = QtWidgets.QAction(MainWindow)
         self.actionGitHub.setObjectName("actionGitHub")
         self.menuFile.addAction(self.actionNew)
         self.menuFile.addAction(self.actionExit)
-        self.menuAbout.addAction(self.actionDeveloper)
         self.menuAbout.addAction(self.actionGitHub)
+        self.menuAbout.addAction(self.actionAbout)
         self.menubar.addAction(self.menuFile.menuAction())
         self.menubar.addAction(self.menuAbout.menuAction())
 
@@ -140,7 +140,7 @@ class Ui_MainWindow(object):
         self.startButton.clicked.connect(self.startClicked)
         self.actionNew.triggered.connect(self.newWorkspace)
         self.actionExit.triggered.connect(sys.exit)
-        self.actionDeveloper.triggered.connect(self.developer_btn_clicked)
+        self.actionAbout.triggered.connect(self.developer_btn_clicked)
         self.actionGitHub.triggered.connect(self.openUrl)
         self.chooseDirectoryButton.clicked.connect(self.dir)
         self.clearButton.clicked.connect(self.newWorkspace)
@@ -167,11 +167,11 @@ class Ui_MainWindow(object):
         self.chooseDirectoryButton.setText(_translate("MainWindow", "..."))
         self.customDirectoryCheckbox.setText(_translate("MainWindow", "Custom Directory"))
         self.menuFile.setTitle(_translate("MainWindow", "File"))
-        self.menuAbout.setTitle(_translate("MainWindow", "About"))
+        self.menuAbout.setTitle(_translate("MainWindow", "Help"))
         self.actionNew.setText(_translate("MainWindow", "New"))
         self.actionExit.setText(_translate("MainWindow", "Exit"))
-        self.actionDeveloper.setText(_translate("MainWindow", "Developer"))
         self.actionGitHub.setText(_translate("MainWindow", "GitHub"))
+        self.actionAbout.setText(_translate("MainWindow", "About"))
         
 ####################################################################################################################################
 ####################################################################################################################################
@@ -188,8 +188,8 @@ class Ui_MainWindow(object):
     def developer_btn_clicked(self):
         self.msg = QtWidgets.QMessageBox()
         self.msg.setIcon(QtWidgets.QMessageBox.Information)
-        self.msg.setWindowTitle("About Developer")
-        self.msg.setText("SubShot is developed by yatish609@github, parvbajaj10@github, aritika2000@github \nThis tool is open-source for modifications under GPL-2.0 License.\nWe do not support or endorse any kind of illegal activities.")
+        self.msg.setWindowTitle("About")
+        self.msg.setText("SubShot is developed under GPL-2.0 License.\nWe do not support or endorse any kind of illegal activities.")
         self.msg.exec_()
     
     def dir(self):
