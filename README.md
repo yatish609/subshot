@@ -6,6 +6,8 @@ This tool provides the following functionalities:
 * Hostile subdomain takeover possibility
 * Screenshotting subdomains using Selenium's Chrome Headless driver
 
+   
+
 SubShot enumerates subdomains using the following search engines and websites: 
 > Google, Yahoo, Bing, Baidu, Ask, Netcraft, Virustotal, ThreatCrowd, DNSdumpster and ReverseDNS.
 
