@@ -7,8 +7,6 @@ The screenshot utility uses Selenium's Chrome Headless driver.
 SubShot enumerates subdomains using the following search engines and websites: 
 > Google, Yahoo, Bing, Baidu, Ask, Netcraft, Virustotal, ThreatCrowd, DNSdumpster and ReverseDNS.
 
-Based on Python 3.8.3 and compiled using python's own virtualenv.
-
 ## Installation
 
 To install dependencies:
@@ -20,11 +18,11 @@ pip install pyqt5 argparse requests dnspython chromedriver selenium webdriver_ma
 To run SubShot:
 
 1. Using source file:
-~~~
-python3 run.py
-~~~
+	'''
+	python3 main.py
+	'''
 
 2. Using Windows executable:
-~~~
-!!! Coming Soon !!!
-~~~
+	'''
+	Coming Soon
+	'''
