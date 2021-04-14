@@ -18,11 +18,11 @@ pip install pyqt5 argparse requests dnspython chromedriver selenium webdriver_ma
 To run SubShot:
 
 1. Using source file:
-	'''
+	```
 	python3 main.py
-	'''
+	```
 
 2. Using Windows executable:
-	'''
+	```
 	Coming Soon
-	'''
+	```
