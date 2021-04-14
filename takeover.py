@@ -70,9 +70,9 @@ class Ui_takeoverWindow(object):
         ######################### Main Functionality ###########################
 
     def takeover(self):
-         subprocess.run("ruby " + self.rootDir + "Hostile" + self.slash + "sub_brute.rb"+ " > " + "Hostile" + self.slash + "output.txt", shell=True)
+         subprocess.run("ruby " + self.rootDir + "Hostile" + self.slash + "hostiletakeover.rb"+ " > " + "Hostile" + self.slash + "output.txt", shell=True)
          
-         
+    
     def takeoverOutput(self):
         self.takeover()
 
