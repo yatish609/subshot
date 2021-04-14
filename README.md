@@ -22,7 +22,4 @@ To run SubShot:
 	python3 main.py
 	```
 
-2. Using Windows executable:
-	```
-	Coming Soon
-	```
+2. Using Windows executable: `Coming Soon`
