@@ -14,7 +14,7 @@ class Ui_MainWindow(object):
         self.ui = Ui_takeoverWindow()
         self.ui.setupUi(self.window)
         self.window.show()
-        text_file = open("Hostile" + self.slash + "url.txt", "w+")
+        text_file = open(self.rootDir + "Hostile" + self.slash + "url.txt", "w+")
         text_file.write(self.inputURL.text())
         text_file.close()
         self.ui.takeoverOutput()
