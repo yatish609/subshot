@@ -2,11 +2,11 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import *
 from PyQt5.Qt import *
 from takeover import Ui_takeoverWindow
-import os,webbrowser, time, subprocess
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
-import re, platform, errno
-
+import re, platform, errno, time, core, os, webbrowser, time, subprocess
+#import threading 
+  
 
 class Ui_MainWindow(object):
     def openWindow(self):
@@ -14,10 +14,7 @@ class Ui_MainWindow(object):
         self.ui = Ui_takeoverWindow()
         self.ui.setupUi(self.window)
         self.window.show()
-        text_file = open(self.rootDir + "Hostile" + self.slash + "url.txt", "w+")
-        text_file.write(self.inputURL.text())
-        text_file.close()
-        self.ui.takeoverOutput()
+        self.ui.threadStart()
     
     def setupUi(self, MainWindow):
         MainWindow.setObjectName("MainWindow")
@@ -59,7 +56,7 @@ class Ui_MainWindow(object):
         self.mainLabel.setGeometry(QtCore.QRect(330, 0, 371, 161))
         font = QtGui.QFont()
         font.setFamily("Parchment")
-        font.setPointSize(50)
+        font.setPointSize(80)
         self.mainLabel.setFont(font)
         self.mainLabel.setObjectName("mainLabel")
         self.probeCheckbox = QtWidgets.QCheckBox(self.centralwidget)
@@ -195,9 +192,6 @@ class Ui_MainWindow(object):
         self.actionGitHub.setText(_translate("MainWindow", "GitHub"))
 
 ####################################################################################################################################
-####################################################################################################################################
-####################################################################################################################################
-####################################################################################################################################
 
     ############################ Global Variables ###########################
         
@@ -205,6 +199,7 @@ class Ui_MainWindow(object):
     workingDir = os.path.dirname(os.path.realpath(__file__)) + slash
     rootDir = os.path.dirname(os.path.realpath(__file__)) + slash
     customBruteFileDir = ""
+    screenshot=False
     
     ############################ Button Functions ###########################
 
@@ -234,28 +229,23 @@ class Ui_MainWindow(object):
        
         
     def startClicked(self):
+        self.startButton.setStyleSheet("background-color: red")
+        self.startButton.setText("Please wait...")
         self.outputView.clear()
         self.progressBar.setFormat('%p%')
         self.progressBar.setProperty("value",0)
-        
+     
         ## Validations
         if self.validateURL():
             if self.validateThreadCount():
-                self.start_to_run()
-                
                 if self.probeCheckbox.isChecked():
-                    self.progressBar.setFormat('Probing - %p%')
-                    self.probedOutput()
                     if self.screenshotCheckbox.isChecked():
-                        self.progressBar.setFormat('Screenshotting - %p%') 
-                        self.runshot()
-                    self.run_to_start()
-                    self.progressBar.setFormat('Done!')  
+                        self.screenshot = True
+                    self.progressBar.setFormat('Probing - %p%')
+                    self.find_subdomains(True)
                 else:
                     self.progressBar.setFormat('Scanning - %p%')
-                    self.rawOutput()
-                    self.run_to_start()
-                    self.progressBar.setFormat('Done!')
+                    self.find_subdomains(False)
                     
     def openUrl(self):
         url = QUrl('https://github.com/yatish609/SubShot')
@@ -357,15 +347,44 @@ class Ui_MainWindow(object):
     
     ######################### Main Functionality ###########################
 
-    def rawSubDomains(self):
+    def createProcessThread(self, command, probed, showOutput):
+        self.workingThread = core.ProcessThread(command)
+        self.workingThread.start()
+        if(showOutput):
+            if (probed == False):
+                self.workingThread.finished.connect(self.rawOutput)
+            else:
+                self.workingThread.finished.connect(self.probedOutput)
+        else:
+            self.workingThread.finished.connect(self.probe_domains)
+
+    def find_subdomains(self, probed):
         url = self.inputURL.text()
         filepath = self.workingDir + "Subdomains" + self.slash + "subdomains.txt"
         self.validatePath(filepath)
-        subprocess.run("python3 -u " + self.rootDir + "subfinder.py -d " + url + " -o " + filepath, shell=True, stdout=subprocess.DEVNULL)
-           
-    
+        if(probed):
+            self.createProcessThread("python3 -u " + self.rootDir + "subfinder.py -d " + url + " -o " + filepath, False, False)
+        else:
+            self.createProcessThread("python3 -u " + self.rootDir + "subfinder.py -d " + url + " -o " + filepath, False, True)
+
+    def probe_domains(self):
+        inputPath = self.workingDir + "Subdomains" + self.slash + "subdomains.txt"
+        self.validatePath(inputPath)
+        f = open(inputPath,"r")
+        outputPath = self.workingDir + "Subdomains" + self.slash + "Filtered_subdomains.txt"
+        self.validatePath(outputPath)
+        f.close()
+        if self.multithreadingCheckbox.isChecked():
+            if self.customthreadsCheckbox.isChecked():
+                threadcount = self.inputCustomThreads.text()
+                self.createProcessThread("python3 -u " + self.rootDir + "prober.py -t " + threadcount + " -f " + inputPath + " -s 200,301 -o " + outputPath, True, True)
+            else:
+                self.createProcessThread("python3 -u " + self.rootDir + "prober.py -t 6 -f " + inputPath + " -s 200,301 -o " + outputPath, True, True)
+        else:
+            self.createProcessThread("python3 -u " + self.rootDir + "prober.py -f " + inputPath + " -s 200,301 -o " + outputPath, True, True)
+
     def rawOutput(self):
-        self.rawSubDomains()
+        self.start_to_run()
 
         inputPath = self.workingDir + "Subdomains" + self.slash + "subdomains.txt"
         self.validatePath(inputPath)
@@ -385,25 +404,11 @@ class Ui_MainWindow(object):
         
         f.close()
         self.run_to_start()
+        self.progressBar.setFormat('Done!')
 
     def probedOutput(self):
-        self.rawSubDomains()
-
-        inputPath = self.workingDir + "Subdomains" + self.slash + "subdomains.txt"
-        self.validatePath(inputPath)
-        f = open(inputPath,"r")
-        outputPath = self.workingDir + "Filtered_Subdomains" + self.slash + "Filtered_subdomains.txt"
-        self.validatePath(outputPath)
-        if self.multithreadingCheckbox.isChecked():
-            if self.customthreadsCheckbox.isChecked():
-                threadcount = self.inputCustomThreads.text()
-                subprocess.run("python3 -u " + self.rootDir + "prober.py -t " + threadcount + " -f " + inputPath + " -s 200,301 -o " + outputPath, shell=True, stdout=subprocess.DEVNULL)
-            else:
-                subprocess.run("python3 -u " + self.rootDir + "prober.py -t 6 -f " + inputPath + " -s 200,301 -o " + outputPath, shell=True, stdout=subprocess.DEVNULL)
-        else:
-            subprocess.run("python3 -u " + self.rootDir + "prober.py -f " + inputPath + " -s 200,301 -o " + outputPath, shell=True, stdout=subprocess.DEVNULL)
-        
-        f.close()
+        self.start_to_run()
+        outputPath = self.workingDir + "Subdomains" + self.slash + "Filtered_subdomains.txt"
 
         f1 = open(outputPath,"r")
         content = f1.readlines()
@@ -421,7 +426,15 @@ class Ui_MainWindow(object):
         
         f1.close()
 
+        if(self.screenshot == True):
+            self.runshot()
+        else:
+            self.run_to_start()
+            self.progressBar.setFormat('Done!')
+
     def runshot(self):
+        self.start_to_run()
+        self.progressBar.setFormat('Screenshotting - %p%')
         # Chrome driver options
         chrome_options = webdriver.ChromeOptions()
         chrome_options.add_argument('headless')
@@ -429,11 +442,12 @@ class Ui_MainWindow(object):
         chrome_options.add_argument('--no-sandbox')
         chrome_options.add_argument('disable-infobars')
         chrome_options.add_argument("--disable-extensions")
+       
 
         driver = webdriver.Chrome(ChromeDriverManager().install(),options=chrome_options)
         
         # Read subdomains from file
-        with open(self.workingDir + "Filtered_Subdomains" + self.slash + "Filtered_subdomains.txt","r") as f:
+        with open(self.workingDir + "Subdomains" + self.slash + "Filtered_subdomains.txt","r") as f:
             content = f.readlines()
         content = [x.strip() for x in content]
         screenshotDir = self.workingDir + "images/"
@@ -454,6 +468,8 @@ class Ui_MainWindow(object):
             self.progressBar.setProperty("value",progressBarValue)
             time.sleep(delay)
 
+        self.run_to_start()
+        self.progressBar.setFormat('Done!')
 
 if __name__ == "__main__":
     import sys

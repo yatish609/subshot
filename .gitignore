@@ -1,6 +1,7 @@
 *.log
 *.pyc
 *.png
+*.ui
 __pycache__
 images
 Subdomains
@@ -10,4 +11,3 @@ dist
 run.spec
 output.txt
 url.txt
-ui

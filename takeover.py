@@ -1,7 +1,7 @@
 from PyQt5 import QtCore, QtGui, QtWidgets
 import os,webbrowser, time, subprocess
-import re, platform, errno
-
+import re, platform, errno, core
+from threading import Thread, Event
 
 class Ui_takeoverWindow(object):
     def setupUi(self, takeoverWindow):
@@ -13,38 +13,42 @@ class Ui_takeoverWindow(object):
         self.centralwidget = QtWidgets.QWidget(takeoverWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.takeoverBox = QtWidgets.QTextBrowser(self.centralwidget)
-        self.takeoverBox.setGeometry(QtCore.QRect(10, 10, 781, 461))
+        self.takeoverBox.setGeometry(QtCore.QRect(10, 70, 781, 401))
         self.takeoverBox.setObjectName("takeoverBox")
         self.takeoverprogressBar = QtWidgets.QProgressBar(self.centralwidget)
         self.takeoverprogressBar.setGeometry(QtCore.QRect(10, 490, 781, 31))
         self.takeoverprogressBar.setProperty("value", 0)
         self.takeoverprogressBar.setObjectName("takeoverprogressBar")
+        self.takeoverButton = QtWidgets.QPushButton(self.centralwidget)
+        self.takeoverButton.setGeometry(QtCore.QRect(14, 10, 771, 34))
+        self.takeoverButton.setObjectName("takeoverButton")
         takeoverWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(takeoverWindow)
-        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 25))
+        self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 31))
         self.menubar.setObjectName("menubar")
         takeoverWindow.setMenuBar(self.menubar)
         self.statusbar = QtWidgets.QStatusBar(takeoverWindow)
         self.statusbar.setObjectName("statusbar")
         takeoverWindow.setStatusBar(self.statusbar)
-        self.toolBar = QtWidgets.QToolBar(takeoverWindow)
-        self.toolBar.setObjectName("toolBar")
-        takeoverWindow.addToolBar(QtCore.Qt.TopToolBarArea, self.toolBar)
 
         self.retranslateUi(takeoverWindow)
         QtCore.QMetaObject.connectSlotsByName(takeoverWindow)
+        self.takeoverButton.clicked.connect(QtCore.QCoreApplication.instance().quit)        
 
     def retranslateUi(self, takeoverWindow):
         _translate = QtCore.QCoreApplication.translate
         takeoverWindow.setWindowTitle(_translate("takeoverWindow", "Takeover"))
-        self.toolBar.setWindowTitle(_translate("takeoverWindow", "toolBar"))
-     ############################ Global Variables ###########################
+        self.takeoverButton.setText(_translate("takeoverWindow", "Close"))
+        
+    
+    ############################ Global Variables ###########################
         
     slash = "\\" if platform.system()=="Windows" else "/"
     workingDir = os.path.dirname(os.path.realpath(__file__)) + slash
     rootDir = os.path.dirname(os.path.realpath(__file__)) + slash
     
-     ######################## Behavior Functions ###########################
+    
+    ######################## Behavior Functions ###########################
         
     def sleepTime(self, content):
         if len(content) > 10000:
@@ -67,16 +71,24 @@ class Ui_takeoverWindow(object):
                     raise
                 
     
-        ######################### Main Functionality ###########################
+    ######################### Main Functionality ###########################
 
-    def takeover(self):
-         subprocess.run("ruby " + self.rootDir + "Hostile" + self.slash + "hostiletakeover.rb"+ " > " + self.rootDir + "Hostile" + self.slash + "output.txt", shell=True)
-         
+    def threadStart(self):
+        self.Check_to_change()
+        self.hostileThread = core.ProcessThread("ruby " + self.workingDir + self.slash +"hostiletakeover.rb")
+        self.hostileThread.start()
+        self.hostileThread.finished.connect(self.takeoverOutput)
+    
+    def Check_to_change(self):
+        self.takeoverButton.setStyleSheet("background-color: green")
+        self.takeoverButton.setText("Checking... Please wait, it might take some time.")
+
+    def Change_to_check(self):
+        self.takeoverButton.setStyleSheet("")
+        self.takeoverButton.setText("Close")
     
     def takeoverOutput(self):
-        self.takeover()
-
-        inputPath = self.workingDir + "Hostile" + self.slash + "output.txt"
+        inputPath = self.workingDir + "Output.txt"
         self.validatePath(inputPath)
         f = open(inputPath,"r")
         content = f.readlines()
@@ -93,7 +105,7 @@ class Ui_takeoverWindow(object):
             time.sleep(delay)
         
         f.close()
-        os.remove(self.workingDir + "Hostile" + self.slash + "url.txt")
+        self.Change_to_check()
 
 
 if __name__ == "__main__":
