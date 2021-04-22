@@ -9,5 +9,4 @@ Filtered_Subdomains
 build
 dist
 run.spec
-output.txt
-url.txt
+Output.txt

@@ -13,15 +13,13 @@ class Ui_takeoverWindow(object):
         self.centralwidget = QtWidgets.QWidget(takeoverWindow)
         self.centralwidget.setObjectName("centralwidget")
         self.takeoverBox = QtWidgets.QTextBrowser(self.centralwidget)
-        self.takeoverBox.setGeometry(QtCore.QRect(10, 70, 781, 401))
+        self.takeoverBox.setGeometry(QtCore.QRect(10, 10, 781, 461))
         self.takeoverBox.setObjectName("takeoverBox")
         self.takeoverprogressBar = QtWidgets.QProgressBar(self.centralwidget)
         self.takeoverprogressBar.setGeometry(QtCore.QRect(10, 490, 781, 31))
         self.takeoverprogressBar.setProperty("value", 0)
         self.takeoverprogressBar.setObjectName("takeoverprogressBar")
-        self.takeoverButton = QtWidgets.QPushButton(self.centralwidget)
-        self.takeoverButton.setGeometry(QtCore.QRect(14, 10, 771, 34))
-        self.takeoverButton.setObjectName("takeoverButton")
+        
         takeoverWindow.setCentralWidget(self.centralwidget)
         self.menubar = QtWidgets.QMenuBar(takeoverWindow)
         self.menubar.setGeometry(QtCore.QRect(0, 0, 800, 31))
@@ -32,13 +30,11 @@ class Ui_takeoverWindow(object):
         takeoverWindow.setStatusBar(self.statusbar)
 
         self.retranslateUi(takeoverWindow)
-        QtCore.QMetaObject.connectSlotsByName(takeoverWindow)
-        self.takeoverButton.clicked.connect(QtCore.QCoreApplication.instance().quit)        
+        QtCore.QMetaObject.connectSlotsByName(takeoverWindow)    
 
     def retranslateUi(self, takeoverWindow):
         _translate = QtCore.QCoreApplication.translate
         takeoverWindow.setWindowTitle(_translate("takeoverWindow", "Takeover"))
-        self.takeoverButton.setText(_translate("takeoverWindow", "Close"))
         
     
     ############################ Global Variables ###########################
@@ -74,20 +70,14 @@ class Ui_takeoverWindow(object):
     ######################### Main Functionality ###########################
 
     def threadStart(self):
-        self.Check_to_change()
+        self.takeoverprogressBar.setFormat('Please wait...')
         self.hostileThread = core.ProcessThread("ruby " + self.workingDir + self.slash +"hostiletakeover.rb")
         self.hostileThread.start()
         self.hostileThread.finished.connect(self.takeoverOutput)
-    
-    def Check_to_change(self):
-        self.takeoverButton.setStyleSheet("background-color: green")
-        self.takeoverButton.setText("Checking... Please wait, it might take some time.")
-
-    def Change_to_check(self):
-        self.takeoverButton.setStyleSheet("")
-        self.takeoverButton.setText("Close")
+        
     
     def takeoverOutput(self):
+        self.takeoverprogressBar.setFormat('Running - %p%')
         inputPath = self.workingDir + "Output.txt"
         self.validatePath(inputPath)
         f = open(inputPath,"r")
@@ -105,7 +95,7 @@ class Ui_takeoverWindow(object):
             time.sleep(delay)
         
         f.close()
-        self.Change_to_check()
+        self.takeoverprogressBar.setFormat('Done!')
 
 
 if __name__ == "__main__":

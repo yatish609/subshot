@@ -17,6 +17,13 @@ To install dependencies:
 pip install pyqt5 argparse requests dnspython chromedriver selenium webdriver_manager
 ~~~
 
+You'll also need ruby which can be installed using:
+
+~~~
+sudo apt install ruby-full // Debian/Ubuntu-based distros
+sudo pacman -S ruby // Arch-based distros
+~~~
+
 To run SubShot:
 
 1. Using source file: `python3 main.py`
