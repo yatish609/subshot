@@ -5,7 +5,7 @@ from takeover import Ui_takeoverWindow
 from selenium import webdriver
 from webdriver_manager.chrome import ChromeDriverManager
 import re, platform, errno, time, core, os, webbrowser, time, subprocess
-#import threading 
+
   
 
 class Ui_MainWindow(object):
@@ -222,17 +222,20 @@ class Ui_MainWindow(object):
         self.commandLinkButton.setEnabled(True)
         self.startButton.setStyleSheet("")
         self.startButton.setText("Start")
-       
-        
-    def startClicked(self):
+    
+    def start_to_start(self):
         self.startButton.setStyleSheet("background-color: red")
         self.startButton.setText("Please wait...")
+        
+       
+    def startClicked(self):
         self.outputView.clear()
         self.progressBar.setFormat('%p%')
         self.progressBar.setProperty("value",0)
      
         ## Validations
         if self.validateURL():
+            self.start_to_start()
             if self.validateThreadCount():
                 if self.probeCheckbox.isChecked():
                     if self.screenshotCheckbox.isChecked():
@@ -304,17 +307,19 @@ class Ui_MainWindow(object):
         if self.inputURL.text()== "":
             self.errorMessage('URL can not be blank')
             return False
+    
         
         if "." not in self.inputURL.text():
             self.errorMessage('Enter a valid URL!')
             return False
         
-        regex = re.compile('[@_!#$^*()<>|}{~]')
+        regex = re.compile('\w+([a-z][.][a-z])\w+')
+
         
-        if(regex.search(self.inputURL.text()) == None):
+        if(regex.search(self.inputURL.text())):
             return True
         else:
-            self.errorMessage('URL should not contain special characters!')
+            self.errorMessage('Enter a valid URL!')
             return False
                     
     def validateThreadCount(self):
