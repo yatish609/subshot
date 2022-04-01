@@ -30,7 +30,7 @@ To run SubShot:
 
 2. Using executable: `Coming Soon`
 
-Troubleshooting:
+## Troubleshooting:
 
 If you get the error: `Fix “qt.qpa.plugin: Could not load the Qt platform plugin "xcb" in "" even though it was found.” Qt Creator`
 
