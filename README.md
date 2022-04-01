@@ -29,3 +29,11 @@ To run SubShot:
 1. Using source file: `python3 main.py`
 
 2. Using executable: `Coming Soon`
+
+Troubleshooting:
+
+If you get the error: `Fix “qt.qpa.plugin: Could not load the Qt platform plugin "xcb" in "" even though it was found.” Qt Creator`
+
+~~~
+sudo apt-get install libxcb-xinerama0
+~~~
