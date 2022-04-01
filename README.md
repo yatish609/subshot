@@ -20,8 +20,8 @@ pip install pyqt5 argparse requests dnspython chromedriver selenium webdriver_ma
 You'll also need ruby which can be installed using:
 
 ~~~
-sudo apt install ruby-full // Debian/Ubuntu-based distros
-sudo pacman -S ruby // Arch-based distros
+sudo apt install ruby-full          // Debian/Ubuntu-based distros
+sudo pacman -S ruby                 // Arch-based distros
 ~~~
 
 To run SubShot:
